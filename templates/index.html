@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cafe & Wifi Finder</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <header>
+        <h1>☕ Cafe & Wifi Finder 📶</h1>
+        <div class="search-bar">
+            <form action="{{ url_for('search_cafes_by_location') }}" method="get">
+                <input type="text" name="loc" placeholder="Search by cafe location..." value="{{ search_query if search_query else '' }}" required>
+                <button type="submit">Search</button>
+            </form>
+        </div>
+        <div class="header-buttons-container">
+            <a href="{{ url_for('home') }}" class="button-link">Home</a>
+            <a href="{{ url_for('add_cafe_form') }}" class="button-link">Add New Cafe</a>
+        </div>
+    </header>
+
+    <main>
+        {% if search_query %}
+            <h2>Results for "{{ search_query }}"</h2>
+        {% endif %}
+
+        {% if error_message %}
+            <p class="error-message">{{ error_message }}</p>
+        {% endif %}
+
+        {% if cafes %}
+        <div class="cafe-grid">
+            {% for cafe in cafes %}
+            <div class="cafe-card">
+                {% if cafe.img_url.startswith('http://') or cafe.img_url.startswith('https://') %}
+                    <img src="{{ cafe.img_url }}" alt="{{ cafe.name }}" class="cafe-image">
+                {% else %}
+                    <img src="{{ url_for('static', filename='uploads/' + cafe.img_url) }}" alt="{{ cafe.name }}" class="cafe-image">
+                {% endif %}
+
+                <div class="cafe-details">
+                    <h2>{{ cafe.name }}</h2>
+                    <p><i class="fas fa-map-marker-alt"></i> {{ cafe.location }}</p>
+                    <p><i class="fas fa-couch"></i> Seats: {{ cafe.seats }}</p>
+                    <p><i class="fas fa-coffee"></i> Coffee Price: {{ cafe.coffee_price if cafe.coffee_price else 'N/A' }}</p>
+
+                    <div class="features">
+                        <span>{% if cafe.has_toilet %}<i class="fas fa-toilet"></i> Toilet{% else %}<i class="fas fa-toilet-slash"></i> No Toilet{% endif %}</span>
+                        <span>{% if cafe.has_wifi %}<i class="fas fa-wifi"></i> Wifi{% else %}<i class="fas fa-wifi-slash"></i> No Wifi{% endif %}</span>
+                        <span>{% if cafe.has_sockets %}<i class="fas fa-plug"></i> Sockets{% else %}<i class="fas fa-times-circle"></i> No Sockets{% endif %}</span>
+                        <span>{% if cafe.can_take_calls %}<i class="fas fa-phone-alt"></i> Calls Allowed{% else %}<i class="fas fa-phone-slash"></i> No Calls{% endif %}</span>
+                    </div>
+
+                    <div class="links">
+                        <a href="{{ cafe.map_url }}" target="_blank"><i class="fas fa-map"></i> View on Map</a>
+                    </div>
+
+                    <div class="admin-actions">
+                        <form action="{{ url_for('delete_cafe_web', cafe_id=cafe.id) }}" method="post">
+                            <input type="password" name="api_key" placeholder="Admin API Key" required>
+                            <button type="submit" class="delete-btn"><i class="fas fa-trash-alt"></i> Delete Cafe</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+            {% if not search_query and not error_message %}
+                <p class="no-cafes">No cafes found in the database. Add one!</p>
+            {% endif %}
+        {% endif %}
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Cafe & Wifi Finder. All rights reserved.</p>
+    </footer>
+</body>
+</html>

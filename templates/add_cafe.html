@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add New Cafe</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <header>
+        <h1>Add a New Cafe</h1>
+        <nav class="add-cafe-nav">
+            <a href="{{ url_for('home') }}" class="button-link">Home</a>
+        </nav>
+    </header>
+
+    <main class="add-cafe-form-container">
+        {% if error %}
+            <p class="error-message">{{ error }}</p>
+        {% endif %}
+        <form action="{{ url_for('add_new_cafe') }}" method="post" class="cafe-form" enctype="multipart/form-data">
+            <label for="name">Cafe Name:</label>
+            <input type="text" id="name" name="name" required><br>
+
+            <label for="map_url">Map URL:</label>
+            <input type="url" id="map_url" name="map_url" placeholder="e.g., Google Maps share link" required>
+            <small class="form-hint">To get the Map URL: Go to Google Maps, search for the cafe, click 'Share' or 'Embed map', and copy the link.</small><br>
+
+            <label for="img_file">Cafe Image:</label>
+            <input type="file" id="img_file" name="img_file" accept="image/png, image/jpeg, image/gif"> <small class="form-hint">Upload an image file (PNG, JPG, GIF). Max size: 16MB. If no file selected, 'default.png' will be used.</small><br>
+
+            <label for="location">Location:</label>
+            <input type="text" id="location" name="location" required><br>
+
+            <label for="seats">Seats (e.g., "20-30", "approx 50"):</label>
+            <input type="text" id="seats" name="seats" required><br>
+
+            <div class="checkbox-group">
+                <input type="checkbox" id="has_toilet" name="has_toilet" value="True">
+                <label for="has_toilet">Has Toilet</label>
+            </div>
+
+            <div class="checkbox-group">
+                <input type="checkbox" id="has_wifi" name="has_wifi" value="True">
+                <label for="has_wifi">Has Wifi</label>
+            </div>
+
+            <div class="checkbox-group">
+                <input type="checkbox" id="has_sockets" name="has_sockets" value="True">
+                <label for="has_sockets">Has Sockets</label>
+            </div>
+
+            <div class="checkbox-group">
+                <input type="checkbox" id="can_take_calls" name="can_take_calls" value="True">
+                <label for="can_take_calls">Can Take Calls</label>
+            </div>
+
+            <label for="coffee_price">Coffee Price (e.g., "£2.50", "$3.00"):</label>
+            <input type="text" id="coffee_price" name="coffee_price"><br>
+
+            <button type="submit" class="submit-btn">Add Cafe</button>
+        </form>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Cafe & Wifi Finder. All rights reserved.</p>
+    </footer>
+</body>
+</html>
