@@ -23,6 +23,7 @@ Data Persistence:
 
 All cafe information is stored persistently in an SQLite database (cafes.db).
 Utilizes Flask-SQLAlchemy for seamless object-relational mapping, simplifying database interactions.
+
 Technical Stack:
 
 Backend Framework: Flask (Python web microframework)
